@@ -1,0 +1,17 @@
+<!doctype html>
+<title>I heard there was going to be nagashi somen in the park, so I thought I'd go check it out.</title>
+<style>
+body {
+	background-image: url('eeehhh.jpg');
+	background-size: cover;
+}
+</style>
+<body>
+<audio id="eeehhh" src="bios.ogg" preload="auto" autoplay></audio>
+</body>
+<script>
+document.getElementById("eeehhh").addEventListener('ended', function () {
+	this.currentTime = 0;
+	this.play();
+}, false);
+</script>
