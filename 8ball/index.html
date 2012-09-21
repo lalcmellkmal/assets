@@ -1,0 +1,111 @@
+<!doctype html>
+<meta charset="UTF-8">
+<title>8</title>
+<script src="jquery-1.8.1.min.js"></script>
+<style>
+html, body, div {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+body {
+	background: black;
+}
+div {
+	background: no-repeat url('back8ball.jpg');
+	background-size: 100%;
+	position: relative;
+	width: 100%;
+}
+p {
+	background: transparent no-repeat url('triangle.png');
+	background-size: 100%;
+	color: transparent;
+	display: table;
+	font: 30pt Helvetica;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	text-align: center;
+	opacity: 0;
+}
+span {
+	display: table-cell;
+	text-shadow: 0 0 4px white;
+	vertical-align: middle;
+}
+</style>
+<body>
+<div><p><span></span></p></div>
+</body>
+<script>
+(function () {
+var $w = $(window), $div = $('div'), $p = $('p'), $s = $('span');
+var x, y, angle, answer;
+var answers = "d=k=%=00=3=m=%-/b3d=k=%=00=3=m=%-/b3d=k=%=00=3=m=%-/b3d=k=%=?q?q?=3=m=%,/b3d=k=%=q=3=m=%-,b3d=k=%==3=m=%-/b3d=k=%==3=m=%-*b3d=k=%==3=m=%-/b3d=k=%==3=m=%-*b3d=k=%=?q=3=m=%,/b3d=k=%==3=m=%-,b3d=k=%=q=3=m=%-)b";
+var result = [];
+for (var i = 0; i < answers.length; i++)
+	result.push(String.fromCharCode((answers.charCodeAt(i)-32)^63));
+answers = JSON.parse(result.join(''));
+
+function shake() {
+	answer = answers[Math.floor(Math.random() * answers.length)];
+	var lines = answer.t.split(/\n/g);
+	$s.empty();
+	for (var i = 0; i < lines.length; i++) {
+		if (i > 0)
+			$s.append('<br>');
+		$s.append(document.createTextNode(lines[i]));
+	}
+
+	angle = Math.random() * 20 - 10;
+	x = Math.random() * 0.06 - 0.03;
+	y = Math.random() * 0.04 - 0.02;
+	var wait = Math.floor(Math.random() * 400 + 1000);
+	var fade = Math.floor(Math.random() * 1000 + 1000);
+	$p.css({opacity: 0, transform: 'rotate('+angle+'deg)'});
+	$p.stop().delay(wait).animate({opacity: 1}, fade, 'swing');
+}
+
+function resize() {
+	var w = $w.width();
+	var h = w * 0.75;
+	$div.height(h);
+	$p.css({
+		left: w * (0.45+x),
+		width: w * 0.4,
+		top: h * (0.35+y),
+		height: h * 0.4,
+	});
+	$s.css({
+		'padding-bottom': h * 0.05,
+		'font-size': w/answer.r,
+	});
+}
+
+function redo() {
+	redoTimer = 0;
+	shake();
+	resize();
+	$div.fadeIn();
+}
+
+var redoTimer = 0;
+$w.resize(function () {
+	if (redoTimer)
+		clearTimeout(redoTimer);
+	else
+		$div.hide();
+	redoTimer = setTimeout(redo, 300);
+});
+
+$s.css({'user-select': 'none', cursor: 'default'});
+if (window.navigator.userAgent.match(/firefox/i))
+	$s.css({'text-shadow': '0 0 3px white'});
+
+shake();
+resize();
+
+})();
+</script>
+
