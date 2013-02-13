@@ -1,0 +1,87 @@
+<!doctype html>
+<meta charset="utf8">
+<title>Loading...</title>
+<style>
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+body {
+	background: black url('empty.jpg') no-repeat center center;
+	background-size: contain;
+}
+</style>
+<body><audio id="bgm" src="impulsioni_ii.ogg" preload="auto" autoplay></audio></body>
+<script>
+(function () {
+document.getElementById("bgm").addEventListener('ended', function () {
+	this.currentTime = 0;
+	this.play();
+}, false);
+function d(n) { return String.fromCharCode(n+46); }
+var ready, done, horo, spec, setupTimeout;
+function loaded() {
+	if (ready)
+		return;
+	ready = true;
+	if (document[spec.hide])
+		setup();
+}
+
+function vis() {
+	var hidden = document[spec.hide];
+	if (hidden && ready && !done)
+		setup();
+	else if (!hidden && setupTimeout) {
+		clearTimeout(setupTimeout);
+		setupTimeout = 0;
+	}
+	else if (!hidden && done)
+		document.title = "hopy horoween";
+}
+
+function setup() {
+	if (setupTimeout)
+		clearTimeout(setupTimeout);
+	setupTimeout = setTimeout(function () {
+		setupTimeout = 0;
+		if (document[spec.hide])
+			go();
+	}, 20000);
+}
+
+function go() {
+	document.body.style.backgroundImage = "url('"+horo.src+"')";
+	done = true;
+}
+
+function t(attr) {
+	return typeof document[attr] != 'undefined';
+}
+if (t('hidden'))
+	spec = {hide: 'hidden', vis: 'visibilitychange'};
+else if (t('mozHidden'))
+	spec = {hide: 'mozHidden', vis: 'mozvisibilitychange'};
+else if (t('msHidden'))
+	spec = {hide: 'msHidden', vis: 'msvisibilitychange'};
+else if (t('webkitHidden'))
+	spec = {hide: 'webkitHidden', vis: 'webkitvisibilitychange'};
+else {
+	spec = {hide: 'hidden'};
+	document.hidden = false;
+	window.onfocus = function () { document.hidden = false; vis(); };
+	window.onblur = function () { document.hidden = true; vis(); };
+}
+if (spec.vis)
+	document.addEventListener(spec.vis, vis, false);
+
+horo = new Image;
+horo.onload = loaded;
+horo.src = d(58)+d(51)+d(68)+d(68)+d(65)+d(73)+d(0)+d(60)+d(66)+d(57);
+setTimeout(function () {
+	if (horo.complete)
+		loaded();
+}, 10);
+})();
+</script>
