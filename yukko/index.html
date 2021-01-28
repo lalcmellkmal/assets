@@ -1,15 +1,41 @@
 <!doctype html>
+<head>
 <title>doushio</title>
 <style>
 body {
 	background: white url('yukko.jpg') no-repeat fixed center bottom;
 }
-object {
-	margin-left: -9001px;
-	position: absolute;
+#prompt {
+	color: #999;
+	font: 2em/4em serif;
+	cursor: default;
+	text-align: center;
+	-webkit-user-select: none;
+	user-select: none;
 }
 </style>
-<object width="425" height="355">
-	<param name="allowScriptAccess" value="always">
-	<embed allowscriptaccess="always" width="425" height="355" src="http://www.youtube.com/v/S-Xm7s9eGxU?version=3&autoplay=1&loop=1" type="application/x-shockwave-flash">
-</object>
+</head>
+<body>
+<div id="prompt"><noscript>Javascript required.</noscript></div>
+<audio id="bgm" loop preload>
+	<source src="gymnopedie-no1.mp3" type="audio/mp3">
+	<source src="gymnopedie-no1.ogg" type="audio/ogg">
+	Your browser does not support the audio element.
+</audio>
+</body>
+<script>
+const prompt = document.getElementById('prompt');
+prompt.innerText = 'click';
+function play() {
+	document.removeEventListener('click', play);
+	try {
+		document.getElementById('bgm').play();
+	}
+	catch (err) {
+		prompt.innerText = err.toString() || 'unknown error';
+		throw err;
+	}
+	prompt.remove();
+}
+document.addEventListener('click', play);
+</script>
